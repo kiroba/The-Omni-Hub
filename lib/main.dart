@@ -68,6 +68,8 @@ class _SuperappMasterScreenState extends State<SuperappMasterScreen> {
     // Ask once on first launch (after the consent gate); restart quietly if Nearby is already on.
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) OmniNearby.instance.onLaunch(context);
+      // Quiet update check on launch: only speaks up when a newer release exists.
+      if (mounted) OmniOta.checkAndPrompt(context, silent: true);
     });
   }
 
@@ -153,6 +155,11 @@ class _SuperappMasterScreenState extends State<SuperappMasterScreen> {
             icon: const Icon(Icons.bug_report_outlined, color: Colors.grey),
             tooltip: 'Report a bug',
             onPressed: () => showBugReportSheet(context, appName: 'Omniverse Superapp'),
+          ),
+          IconButton(
+            icon: const Icon(Icons.system_update, color: Color(0xFF03DAC6)),
+            tooltip: 'Check for updates',
+            onPressed: () => OmniOta.checkAndPrompt(context),
           ),
           PopupMenuButton<String>(
             tooltip: 'More',
