@@ -143,6 +143,11 @@ class _SuperappMasterScreenState extends State<SuperappMasterScreen> {
             tooltip: 'Report a bug',
             onPressed: () => showBugReportSheet(context, appName: 'Omniverse Superapp'),
           ),
+          IconButton(
+            icon: const Icon(Icons.system_update, color: Color(0xFF03DAC6)),
+            tooltip: 'Check for updates',
+            onPressed: () => OmniOta.checkAndPrompt(context),
+          ),
           PopupMenuButton<String>(
             tooltip: 'More',
             onSelected: (value) {
