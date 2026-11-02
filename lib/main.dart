@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:omni_core_ui/omni_core_ui.dart' show OmniOta;
 import 'omni_bug_report.dart';
 import 'omni_consent_gate.dart';
+import 'omni_fit.dart';
 import 'omni_nearby.dart'; // "Find people nearby?" prompt + BLE / Wi-Fi Aware start
 
 /// ============================================================================
@@ -138,13 +139,13 @@ class _SuperappMasterScreenState extends State<SuperappMasterScreen> {
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: const [
-            Text('The Omniverse', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-            Text('1 Sovereign Node Active • Mainnet Shell', style: TextStyle(color: Color(0xFF03DAC6), fontSize: 11)),
+            Text('The Omniverse', maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+            Text('1 Sovereign Node Active • Mainnet Shell', maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(color: Color(0xFF03DAC6), fontSize: 11)),
           ],
         ),
         backgroundColor: const Color(0xFF1F1F1F),
         elevation: 2,
-        actions: [
+        actions: fitAppBarActions(context, [
           const NearbyButton(),
           IconButton(
             icon: const Icon(Icons.account_balance_wallet, color: Color(0xFFBB86FC)),
@@ -177,7 +178,7 @@ class _SuperappMasterScreenState extends State<SuperappMasterScreen> {
               ),
             ],
           ),
-        ],
+        ]),
       ),
       body: IndexedStack(
         index: _activeTab,
@@ -257,7 +258,7 @@ class _SuperappMasterScreenState extends State<SuperappMasterScreen> {
                               children: [
                                 const CircleAvatar(radius: 14, backgroundColor: Color(0xFFBB86FC), child: Icon(Icons.person, size: 16, color: Colors.black)),
                                 const SizedBox(width: 8),
-                                Text(item['author'], style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                                Flexible(child: Text(item['author'], maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13))),
                                 const SizedBox(width: 4),
                                 const Icon(Icons.verified, size: 14, color: Color(0xFF03DAC6)),
                               ],
@@ -277,17 +278,16 @@ class _SuperappMasterScreenState extends State<SuperappMasterScreen> {
 
   // TAB 2: Halo Plaza & Arcade Hub
   Widget _buildHaloPlazaAndArcadeTab() {
-    return Padding(
+    return ListView(
       padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+      children: [
           const Text('Halo Plaza & Arcade Lounge', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
           const SizedBox(height: 6),
           const Text('Spatial gathering hub hosting mini-games and arena brawlers.', style: TextStyle(color: Colors.grey, fontSize: 12)),
           const SizedBox(height: 16),
-          Expanded(
-            child: GridView.count(
+          GridView.count(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
               crossAxisCount: 2,
               crossAxisSpacing: 12,
               mainAxisSpacing: 12,
@@ -298,15 +298,13 @@ class _SuperappMasterScreenState extends State<SuperappMasterScreen> {
                 _buildArcadeCard('Spades Lounge', 'Casual Card Strategy', Icons.style, const Color(0xFF7C4DFF)),
               ],
             ),
-          ),
-        ],
-      ),
+      ],
     );
   }
 
   // TAB 3: RPG Idle Realm
   Widget _buildRpgIdleRealmTab() {
-    return Padding(
+    return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -325,7 +323,7 @@ class _SuperappMasterScreenState extends State<SuperappMasterScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text('Mining Skill', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                      const Flexible(child: Text('Mining Skill', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold))),
                       Text('Level $_miningLevel', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFF03DAC6))),
                     ],
                   ),
@@ -354,7 +352,7 @@ class _SuperappMasterScreenState extends State<SuperappMasterScreen> {
 
   // TAB 4: Sovereign Wallet & Storefront
   Widget _buildSovereignWalletAndStoreTab() {
-    return Padding(
+    return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -372,7 +370,7 @@ class _SuperappMasterScreenState extends State<SuperappMasterScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: const [
-                      Text('Shadow Off-Chain Balance', style: TextStyle(color: Colors.grey)),
+                      Flexible(child: Text('Shadow Off-Chain Balance', style: TextStyle(color: Colors.grey))),
                       Text('0.00 OMNI', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFF03DAC6))),
                     ],
                   ),
@@ -380,7 +378,7 @@ class _SuperappMasterScreenState extends State<SuperappMasterScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: const [
-                      Text('Stripe Gateway', style: TextStyle(color: Colors.grey)),
+                      Flexible(child: Text('Stripe Gateway', style: TextStyle(color: Colors.grey))),
                       Text('Ready (1-Tap)', style: TextStyle(color: Color(0xFFBB86FC), fontWeight: FontWeight.bold)),
                     ],
                   ),
@@ -395,6 +393,8 @@ class _SuperappMasterScreenState extends State<SuperappMasterScreen> {
 
   Widget _buildPreLaunchZeroState(String title, String subtitle) {
     return Center(
+      child: SingleChildScrollView(
+      padding: const EdgeInsets.all(16),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -404,6 +404,7 @@ class _SuperappMasterScreenState extends State<SuperappMasterScreen> {
           const SizedBox(height: 8),
           Text(subtitle, style: const TextStyle(color: Colors.grey, fontSize: 13)),
         ],
+      ),
       ),
     );
   }
@@ -418,8 +419,10 @@ class _SuperappMasterScreenState extends State<SuperappMasterScreen> {
         },
         child: Padding(
           padding: const EdgeInsets.all(12),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               Icon(icon, size: 36, color: color),
               const SizedBox(height: 8),
@@ -427,6 +430,7 @@ class _SuperappMasterScreenState extends State<SuperappMasterScreen> {
               const SizedBox(height: 4),
               Text(subtitle, textAlign: TextAlign.center, style: const TextStyle(fontSize: 10, color: Colors.grey)),
             ],
+          ),
           ),
         ),
       ),
@@ -437,6 +441,7 @@ class _SuperappMasterScreenState extends State<SuperappMasterScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
+        scrollable: true,
         backgroundColor: const Color(0xFF1E1E1E),
         title: const Text('Sovereign Wallet'),
         content: const Text('Shadow balance: 0.00 OMNI\nLocal node signature verified.'),
