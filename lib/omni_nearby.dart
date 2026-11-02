@@ -137,6 +137,7 @@ class OmniNearby extends ChangeNotifier {
       final open = await showDialog<bool>(
         context: context,
         builder: (ctx) => AlertDialog(
+        scrollable: true,
           title: const Text('Nearby runs in Omni Node'),
           content: const Text('Omni Node handles Bluetooth and Wi-Fi for all your Omni apps, '
               'so they share the same nearby people. Turn it on or off there.'),
@@ -152,6 +153,7 @@ class OmniNearby extends ChangeNotifier {
     final yes = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
+        scrollable: true,
         title: const Text('Find people nearby?'),
         content: Text(running
             ? 'Nearby is on. Your phone is connecting directly to people around you over '
